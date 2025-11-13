@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAChan</title>
+    {% load static %}
+    <link rel="icon" type='image/x-icon' href="{% static 'main/img/icon.ico' %}">
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+    <script src="{% static 'main/js/script.js' %}" defer></script>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <h1>FAChan</h1>
+                </div>
+                
+                <div class="header-actions">
+                    <!-- Кнопка поиска -->
+                    <button class="btn-icon" id="searchBtn" title="Поиск">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Переключатель темы -->
+                    <button class="btn-icon" id="themeToggle" title="Сменить тему">
+                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Кнопки авторизации (показываются если не авторизован) -->
+                    <div id="authButtons" class="auth-buttons">
+                        <button class="btn btn-outline" id="loginBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                            Войти
+                        </button>
+                        <button class="btn btn-primary" id="registerBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <line x1="19" y1="8" x2="19" y2="14"></line>
+                                <line x1="22" y1="11" x2="16" y2="11"></line>
+                            </svg>
+                            Регистрация
+                        </button>
+                    </div>
+                    
+                    <!-- Профиль пользователя (показывается если авторизован) -->
+                    <div id="userProfile" class="user-profile" style="display: none;">
+                        <div class="user-info">
+                            <div class="avatar" id="userAvatar">A</div>
+                            <span id="username">Пользователь</span>
+                        </div>
+                        <button class="btn btn-outline" id="logoutBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Выйти
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main">
+        <div class="container">
+            <!-- Вкладки -->
+            <div class="tabs">
+                <div class="tabs-list">
+                    <button class="tab-trigger active" data-tab="news">Новости</button>
+                    <button class="tab-trigger" data-tab="forum">Форум</button>
+                </div>
+                
+                <!-- Контент вкладки "Новости" -->
+                <div class="tab-content active" id="news">
+                    <div class="section-header">
+                        <h2>Последние новости</h2>
+                        <p class="text-muted" id="newsCount">Всего новостей: 4</p>
+                    </div>
+                    
+                    <div class="news-grid" id="newsList"></div>
+                </div>
+                
+                <!-- Контент вкладки "Форум" -->
+                <div class="tab-content" id="forum">
+                    <div class="section-header">
+                        <h2>Темы форума</h2>
+                        <button class="btn btn-primary">Создать тему</button>
+                    </div>
+                    
+                    <div class="forum-list" id="forumList"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Вход</h3>
+                <button class="modal-close" data-modal="loginModal">&times;</button>
+            </div>
+            <p class="text-muted">Войдите в свой аккаунт, чтобы участвовать в форуме</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="example@mail.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Войти</button>
+                
+                <div class="modal-footer">
+                    <span class="text-muted">Нет аккаунта?</span>
+                    <a href="#" id="switchToRegister">Зарегистрироваться</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Регистрация</h3>
+                <button class="modal-close" data-modal="registerModal">&times;</button>
+            </div>
+            <p class="text-muted">Создайте аккаунт, чтобы присоединиться к сообществу</p>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerUsername">Имя пользователя</label>
+                    <input type="text" id="registerUsername" placeholder="Sakura_chan" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="example@mail.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Подтвердите пароль</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Зарегистрироваться</button>
+                
+                <div class="modal-footer">
+                    <span class="text-muted">Уже есть аккаунт?</span>
+                    <a href="#" id="switchToLogin">Войти</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно поиска -->
+    <div class="modal" id="searchModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Поиск</h3>
+                <button class="modal-close" data-modal="searchModal">&times;</button>
+            </div>
+            
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Поиск новостей, тем форума или пользователей..." autofocus>
+            </div>
+            
+            <div class="search-results" id="searchResults">
+                <div class="search-empty">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <p>Введите запрос для поиска</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
