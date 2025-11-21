@@ -7,7 +7,7 @@
     {% load static %}
     <link rel="icon" type='image/x-icon' href="{% static 'main/img/icon.ico' %}">
     <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
-    <script src="{% static 'main/js/script.js' %}" defer></script>
+<!--    <script src="{% static 'main/js/script.js' %}" defer></script>-->
 </head>
 <body>
     <!-- Шапка сайта -->
@@ -104,10 +104,39 @@
                 <div class="tab-content active" id="news">
                     <div class="section-header">
                         <h2>Последние новости</h2>
-                        <p class="text-muted" id="newsCount">Всего новостей: 4</p>
+                        <p class="text-muted" id="newsCount">Всего новостей: {{news.count}}</p>
                     </div>
                     
-                    <div class="news-grid" id="newsList"></div>
+                    <div class="news-grid" id="newsList">
+                        {% for new in news %}
+                            <div class="news-card">
+                                <img src="{{ new.image }}" alt="{{ new.title }}">
+                                <div class="news-card-header">
+                                    <div class="news-card-meta">
+                                        <span class="badge">{{ new.category }}</span>
+                                        <div class="views">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            <span>{{new.count_views}}</span>
+                                        </div>
+                                    </div>
+                                    <h3>{{new.title}}</h3>
+                                    <p>{{new.content}}</p>
+                                </div>
+                                <div class="news-card-footer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <span>{{new.created_at|date:"d M Y"}}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 
                 <!-- Контент вкладки "Форум" -->
@@ -117,7 +146,44 @@
                         <button class="btn btn-primary">Создать тему</button>
                     </div>
                     
-                    <div class="forum-list" id="forumList"></div>
+                    <div class="forum-list" id="forumList">
+                        {% for thread in threads %}
+                            <div class="forum-card">
+                                <div class="forum-card-content">
+                                    <div class="forum-avatar">{{thread.author.username|first|upper}}</div>
+                                    <div class="forum-info">
+                                        <div class="forum-badge">{{thread.category}}</div>
+                                        <h3>{{thread.title}}</h3>
+                                        <div class="forum-meta">
+                                            <div class="forum-meta-item">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="12" cy="7" r="4"></circle>
+                                                </svg>
+                                            </div>
+                                            <div class="forum-meta-item">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                                </svg>
+                                                <span>{{thread.count_messages}} сообщений</span>
+                                            </div>
+                                            <div class="forum-meta-item">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                </svg>
+                                                <span>{{thread.last_message_time|timesince}} назад</span>
+                                            </div>
+                                        </div>
+                                        <div class="forum-stats">
+                                            <div class="forum-stats-number">{{thread.count_views}}</div>
+                                            <div class="forum-stats-label">просмотров</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
