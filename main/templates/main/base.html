@@ -50,24 +50,45 @@
                     </button>
                     
                     <!-- Кнопки авторизации (показываются если не авторизован) -->
-                    <div id="authButtons" class="auth-buttons">
-                        <button class="btn btn-outline" id="loginBtn">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                                <polyline points="10 17 15 12 10 7"></polyline>
-                                <line x1="15" y1="12" x2="3" y2="12"></line>
-                            </svg>
-                            Войти
-                        </button>
-                        <button class="btn btn-primary" id="registerBtn">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <line x1="19" y1="8" x2="19" y2="14"></line>
-                                <line x1="22" y1="11" x2="16" y2="11"></line>
-                            </svg>
-                            Регистрация
-                        </button>
+                    <div class="header-actions">
+                        {% if user.is_authenticated %}
+                            <div class="user-profile">
+                                <div class="user-info">
+                                    <div class="avatar">{{ user.username }}</div>
+                                    <span>{{ user.username }}</span>
+                                </div>
+                                <a href="{% url 'logout' %}" class="btn btn-outline">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    Выйти
+                                </a>
+                            </div>
+                        {% else %}
+                            <div>
+                                <a href="{% url 'login' %}" class="btn btn-outline">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                        <polyline points="10 17 15 12 10 7"></polyline>
+                                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                                    </svg>
+                                    Войти
+                                </a>
+                            </div>
+                            <div>
+                                <a href="{% url 'register' %}" class="btn btn-primary">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <line x1="19" y1="8" x2="19" y2="14"></line>
+                                        <line x1="22" y1="11" x2="16" y2="11"></line>
+                                    </svg>
+                                    Регистрация
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                     
                     <!-- Профиль пользователя (показывается если авторизован) -->
@@ -93,6 +114,7 @@
     <!-- Основной контент -->
     <main class="main">
         <div class="container">
+            {% block content %}
             <!-- Вкладки -->
             <div class="tabs">
                 <div class="tabs-list">
@@ -186,78 +208,9 @@
                     </div>
                 </div>
             </div>
+            {% endblock %}
         </div>
     </main>
-
-    <!-- Модальное окно входа -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Вход</h3>
-                <button class="modal-close" data-modal="loginModal">&times;</button>
-            </div>
-            <p class="text-muted">Войдите в свой аккаунт, чтобы участвовать в форуме</p>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" placeholder="example@mail.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="loginPassword">Пароль</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full">Войти</button>
-                
-                <div class="modal-footer">
-                    <span class="text-muted">Нет аккаунта?</span>
-                    <a href="#" id="switchToRegister">Зарегистрироваться</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Модальное окно регистрации -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Регистрация</h3>
-                <button class="modal-close" data-modal="registerModal">&times;</button>
-            </div>
-            <p class="text-muted">Создайте аккаунт, чтобы присоединиться к сообществу</p>
-            
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerUsername">Имя пользователя</label>
-                    <input type="text" id="registerUsername" placeholder="Sakura_chan" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" placeholder="example@mail.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerPassword">Пароль</label>
-                    <input type="password" id="registerPassword" placeholder="••••••••" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerConfirmPassword">Подтвердите пароль</label>
-                    <input type="password" id="registerConfirmPassword" placeholder="••••••••" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full">Зарегистрироваться</button>
-                
-                <div class="modal-footer">
-                    <span class="text-muted">Уже есть аккаунт?</span>
-                    <a href="#" id="switchToLogin">Войти</a>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Модальное окно поиска -->
     <div class="modal" id="searchModal">
