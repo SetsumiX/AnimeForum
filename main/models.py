@@ -19,11 +19,19 @@ class News(models.Model):
         verbose_name_plural = "Новости"
 
 class Thread(models.Model):
+    CATEGORY_CHOICES = [
+        ('Обсуждение', 'Обсуждение'),
+        ('Вопрос', 'Вопрос'),
+        ('Рекомендации', 'Рекомендации'),
+        ('Новости', 'Новости'),
+        ('Игры', 'Игры'),
+    ]
+
     title = models.CharField(max_length=200)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Обсуждение')
     count_messages = models.IntegerField(default=0, blank=True)
     count_views = models.IntegerField(default=0, blank=True)
     last_message_time = models.DateTimeField(auto_now=True)

@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .forms import UserRegisterForm, UserLoginForm
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from .forms import UserRegisterForm, UserLoginForm, ThreadForm
 from .models import News, Thread
 
 # Create your views here.
@@ -49,5 +51,44 @@ def home(request):
     context = {
         'news': news,
         'threads': threads,
+        'items_count': news.count(),
+        'active_tab': 'news',
     }
-    return render(request, 'main/base.html', context)
+    return render(request, 'main/news.html', context)
+
+def news_page(request):
+    news = News.objects.all().order_by("-created_at")[:3]
+    context = {
+        'news': news,
+        'items_count': news.count(),
+        'active_tab': 'news',
+    }
+    return render(request, 'main/news.html', context)
+
+def forums_page(request):
+    threads = Thread.objects.all().order_by("-created_at")[:6]
+    context = {
+        'threads': threads,
+        'items_count': threads.count(),
+        'active_tab': 'forum',
+    }
+    return render(request, 'main/threads.html', context)
+
+@login_required
+def create_thread(request):
+    if request.method == 'POST':
+        form = ThreadForm(request.POST)
+        if form.is_valid():
+            thread = form.save(commit=False)
+            thread.author = request.user
+            thread.save()
+            messages.success(request, 'Форум создан!')
+            return redirect('forums_page')
+    else:
+        form = ThreadForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'main/create_thread.html', context)

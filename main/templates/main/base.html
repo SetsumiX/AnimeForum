@@ -15,11 +15,13 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                    </svg>
-                    <h1>FAChan</h1>
+                    <a href="{% url 'home' %}" style="text-decoration: none;">
+                        <svg class="logo-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                        <h1>FAChan</h1>
+                    </a>
                 </div>
                 
                 <div class="header-actions">
@@ -57,7 +59,7 @@
                                     <div class="avatar">{{ user.username }}</div>
                                     <span>{{ user.username }}</span>
                                 </div>
-                                <a href="{% url 'logout' %}" class="btn btn-outline">
+                                <a href="{% url 'logout' %}" class="btn btn-outline" style="text-decoration: none">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -68,7 +70,7 @@
                             </div>
                         {% else %}
                             <div>
-                                <a href="{% url 'login' %}" class="btn btn-outline">
+                                <a href="{% url 'login' %}" class="btn btn-outline" style="text-decoration: none">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                                         <polyline points="10 17 15 12 10 7"></polyline>
@@ -78,7 +80,7 @@
                                 </a>
                             </div>
                             <div>
-                                <a href="{% url 'register' %}" class="btn btn-primary">
+                                <a href="{% url 'register' %}" class="btn btn-primary" style="text-decoration: none">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="9" cy="7" r="4"></circle>
@@ -115,95 +117,49 @@
     <main class="main">
         <div class="container">
             {% block content %}
+
+            {% if active_tab == 'forum' or request.path == '/forum/' %}
+                <div style="text-align: right; margin-bottom: 1rem;">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'create_thread' %}" class="btn btn-primary" style="text-decoration: none;">Создать форум</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary" style="text-decoration: none;">Авторизоваться для создания форума</a>
+                    {% endif %}
+                </div>
+            {% endif %}
             <!-- Вкладки -->
             <div class="tabs">
                 <div class="tabs-list">
-                    <button class="tab-trigger active" data-tab="news">Новости</button>
-                    <button class="tab-trigger" data-tab="forum">Форум</button>
+                    <a href="{% url 'news_page' %}" class="tab-trigger {% if active_tab == 'news' %}active{% endif %}">
+                        Новости
+                    </a>
+                    <a href="{% url 'forums_page' %}" class="tab-trigger {% if active_tab == 'forum' %}active{% endif %}">
+                        Форум
+                    </a>
                 </div>
                 
                 <!-- Контент вкладки "Новости" -->
                 <div class="tab-content active" id="news">
                     <div class="section-header">
-                        <h2>Последние новости</h2>
-                        <p class="text-muted" id="newsCount">Всего новостей: {{news.count}}</p>
+                        <h2>{{page_title|default:'Последние новости'}}</h2>
+                        <p class="text-muted" id="newsCount">Всего {{items_name|default:'новостей'}}: {{ items_count }}</p>
                     </div>
-                    
+
                     <div class="news-grid" id="newsList">
-                        {% for new in news %}
-                            <div class="news-card">
-                                <img src="{{ new.image }}" alt="{{ new.title }}">
-                                <div class="news-card-header">
-                                    <div class="news-card-meta">
-                                        <span class="badge">{{ new.category }}</span>
-                                        <div class="views">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                <circle cx="12" cy="12" r="3"></circle>
-                                            </svg>
-                                            <span>{{new.count_views}}</span>
-                                        </div>
-                                    </div>
-                                    <h3>{{new.title}}</h3>
-                                    <p>{{new.content}}</p>
-                                </div>
-                                <div class="news-card-footer">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                                    </svg>
-                                    <span>{{new.created_at|date:"d M Y"}}</span>
-                                </div>
-                            </div>
-                        {% endfor %}
+
                     </div>
                 </div>
                 
                 <!-- Контент вкладки "Форум" -->
                 <div class="tab-content" id="forum">
+
                     <div class="section-header">
                         <h2>Темы форума</h2>
-                        <button class="btn btn-primary">Создать тему</button>
                     </div>
                     
                     <div class="forum-list" id="forumList">
                         {% for thread in threads %}
-                            <div class="forum-card">
-                                <div class="forum-card-content">
-                                    <div class="forum-avatar">{{thread.author.username|first|upper}}</div>
-                                    <div class="forum-info">
-                                        <div class="forum-badge">{{thread.category}}</div>
-                                        <h3>{{thread.title}}</h3>
-                                        <div class="forum-meta">
-                                            <div class="forum-meta-item">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                                    <circle cx="12" cy="7" r="4"></circle>
-                                                </svg>
-                                            </div>
-                                            <div class="forum-meta-item">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                                </svg>
-                                                <span>{{thread.count_messages}} сообщений</span>
-                                            </div>
-                                            <div class="forum-meta-item">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <circle cx="12" cy="12" r="10"></circle>
-                                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                                </svg>
-                                                <span>{{thread.last_message_time|timesince}} назад</span>
-                                            </div>
-                                        </div>
-                                        <div class="forum-stats">
-                                            <div class="forum-stats-number">{{thread.count_views}}</div>
-                                            <div class="forum-stats-label">просмотров</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         {% endfor %}
                     </div>
                 </div>
