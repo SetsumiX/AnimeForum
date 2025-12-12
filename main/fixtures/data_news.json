@@ -1,0 +1,84 @@
+[
+  {
+    "model": "main.news",
+    "pk": 1,
+    "fields": {
+      "title": "Новый сезон аниме 2024",
+      "content": "Анонсированы даты выхода самых ожидаемых аниме этого сезона, включая продолжения популярных франшиз.",
+      "created_at": "2024-01-10T12:00:00Z",
+      "count_views": 1542,
+      "category": "Аниме",
+      "image": "https://images.unsplash.com/photo-1541562232579-512a21360020?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 2,
+    "fields": {
+      "title": "Релиз новой игры по аниме",
+      "content": "Выходит новая игра по мотивам популярного аниме сериала. Первые отзывы положительные.",
+      "created_at": "2024-01-09T15:30:00Z",
+      "count_views": 892,
+      "category": "Игры",
+      "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 3,
+    "fields": {
+      "title": "Конвенция аниме в Москве",
+      "content": "Анонсирована крупнейшая аниме-конвенция этого года. Ожидается множество гостей и мероприятий.",
+      "created_at": "2024-01-08T10:15:00Z",
+      "count_views": 2105,
+      "category": "События",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CPAC_Logo.png/1200px-CPAC_Logo.png"
+    }
+  },
+  {
+    "model": "main.thread",
+    "pk": 1,
+    "fields": {
+      "title": "Какое аниме посмотреть новичку?",
+      "content": "Только начинаю смотреть аниме, посоветуйте что-то легкое для старта. Какие сериалы самые понятные для начала?",
+      "author": 1,
+      "created_at": "2024-01-10T14:20:00Z",
+      "category": "Рекомендации",
+      "count_messages": 24,
+      "count_views": 312,
+      "last_message_time": "2024-01-10T14:20:00Z"
+    }
+  },
+  {
+    "model": "main.thread",
+    "pk": 2,
+    "fields": {
+      "title": "Обсуждение манги One Piece",
+      "content": "Что думаете о последних главах? Какие будут предсказания на развитие сюжета? Давайте обсудим!",
+      "author": 1,
+      "created_at": "2024-01-09T11:45:00Z",
+      "category": "Обсуждение",
+      "count_messages": 156,
+      "count_views": 2104,
+      "last_message_time": "2024-01-10T09:30:00Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abc123abc123abc123abc123abc123ab$abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abcd=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "kanava",
+      "first_name": "",
+      "last_name": "",
+      "email": "kanava@fachan.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-01-01T00:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

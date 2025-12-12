@@ -43,7 +43,6 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
-
 def home(request):
     news = News.objects.all().order_by('-created_at')[:3]
     threads = Thread.objects.all().order_by('-created_at')[:6]
@@ -92,3 +91,4 @@ def create_thread(request):
     }
 
     return render(request, 'main/create_thread.html', context)
+
