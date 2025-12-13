@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <article class="news-article">
+
+        <a href="{% url 'news_page' %}" class="btn btn-outline" style="margin-bottom: 1rem;">
+            ← Назад к новостям
+        </a>
+        
+        <header class="news-header">
+            <div class="news-meta">
+                <span class="badge">{{ news.category }}</span>
+                <div class="news-stats">
+                    <span class="views">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        {{ news.count_views }} просмотров
+                    </span>
+                    <span class="date">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        {{ news.created_at|date:"d.m.Y H:i" }}
+                    </span>
+                </div>
+            </div>
+            <h1>{{ news.title }}</h1>
+        </header>
+        
+        {% if news.image %}
+        <div class="news-image">
+            <img src="{{ news.image }}" alt="{{ news.title }}" style="width: 100%; border-radius: 8px;">
+        </div>
+        {% endif %}
+        
+        <div class="news-content">
+            {{ news.content|linebreaks }}
+        </div>
+        
+        <footer class="news-footer">
+            <a href="{% url 'news_page' %}" class="btn btn-outline">← Назад к списку</a>
+            {% if user.is_staff %}
+                <a href="/admin/main/news/{{ news.id }}/change/" class="btn btn-outline" target="_blank">
+                    Редактировать (админ)
+                </a>
+            {% endif %}
+        </footer>
+    </article>
+</div>
+
+<style>
+.news-article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.news-header {
+    margin-bottom: 2rem;
+}
+
+.news-header h1 {
+    font-size: 2.5rem;
+    margin: 1rem 0;
+}
+
+.news-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.news-stats {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.news-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.news-image {
+    margin: 2rem 0;
+}
+
+.news-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 2rem 0;
+}
+
+.news-content p {
+    margin-bottom: 1.5rem;
+}
+
+.news-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+</style>
+{% endblock %}

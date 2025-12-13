@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -44,8 +44,8 @@ def user_logout(request):
     return redirect('login')
 
 def home(request):
-    news = News.objects.all().order_by('-created_at')[:3]
-    threads = Thread.objects.all().order_by('-created_at')[:6]
+    news = News.objects.all().order_by('-created_at')
+    threads = Thread.objects.all().order_by('-created_at')
 
     context = {
         'news': news,
@@ -56,7 +56,7 @@ def home(request):
     return render(request, 'main/news.html', context)
 
 def news_page(request):
-    news = News.objects.all().order_by("-created_at")[:3]
+    news = News.objects.all().order_by("-created_at")
     context = {
         'news': news,
         'items_count': news.count(),
@@ -64,8 +64,18 @@ def news_page(request):
     }
     return render(request, 'main/news.html', context)
 
+def news_detail(request, news_id):
+    news = get_object_or_404(News, id=news_id)
+    news.count_views += 1
+    news.save()
+
+    context = {
+        'news': news,
+    }
+    return render(request, 'main/news_detail.html', context)
+
 def forums_page(request):
-    threads = Thread.objects.all().order_by("-created_at")[:6]
+    threads = Thread.objects.all().order_by("-created_at")
     context = {
         'threads': threads,
         'items_count': threads.count(),
