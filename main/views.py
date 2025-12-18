@@ -83,6 +83,17 @@ def forums_page(request):
     }
     return render(request, 'main/threads.html', context)
 
+def thread_detail(request, thread_id):
+    thread = get_object_or_404(Thread, id=thread_id)
+    thread.count_views += 1
+    thread.save()
+
+    context = {
+        'thread': thread,
+    }
+
+    return render(request, 'main/thread_detail.html', context)
+
 @login_required
 def create_thread(request):
     if request.method == 'POST':

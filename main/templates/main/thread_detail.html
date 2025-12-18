@@ -1,0 +1,232 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <!-- Кнопка назад -->
+    <a href="{% url 'forums_page' %}" class="btn btn-outline" style="margin-bottom: 1rem;">
+        ← Назад к форуму
+    </a>
+
+    <!-- Основной контент треда -->
+    <div class="thread-container">
+        <!-- Шапка треда -->
+        <div class="thread-header">
+            <div class="thread-meta">
+                <span class="badge">{{ thread.category }}</span>
+                <div class="thread-stats">
+                    <span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        {{ thread.count_views }} просмотров
+                    </span>
+                    <span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        {{ thread.count_messages }} сообщений
+                    </span>
+                </div>
+            </div>
+            <h1>{{ thread.title }}</h1>
+            <div class="thread-author">
+                <div class="avatar">{{ thread.author.username|first|upper }}</div>
+                <div>
+                    <strong>{{ thread.author.username }}</strong>
+                    <small>{{ thread.created_at|date:"d.m.Y H:i" }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контент треда -->
+        <div class="thread-content">
+            {{ thread.content|linebreaks }}
+        </div>
+
+        <!-- Футер треда (действия) -->
+        <div class="thread-actions">
+            {% if user == thread.author or user.is_staff %}
+                <a href="#" class="btn btn-outline">Редактировать</a>
+                <a href="#" class="btn btn-outline">Удалить</a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <button class="btn btn-primary" onclick="replyToThread()">Ответить</button>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Войдите чтобы ответить</a>
+            {% endif %}
+        </div>
+
+        <!-- Комментарии (пока заглушка) -->
+        <div class="thread-comments">
+            <h3>Комментарии ({{ thread.count_messages }})</h3>
+
+            {% if thread.count_messages == 0 %}
+                <div class="empty-comments">
+                    <p>Пока нет комментариев. Будьте первым!</p>
+                </div>
+            {% else %}
+                <!-- Здесь будут комментарии -->
+                {%* for comment in comments *%}
+                    <div class="comment">
+                        <div class="comment-author">
+                            <div class="avatar">{{ comment.user.username|first|upper }}</div>
+                            <div>
+                                <strong>{{ comment.user.username }}</strong>
+                                <small>{{  }}</small>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            <p>{{ comment. }}</p>
+                        </div>
+                    </div>
+                {%* endfor *%}
+            {% endif %}
+
+            <!-- Форма комментария -->
+            {% if user.is_authenticated %}
+                <form class="comment-form">
+                    <textarea placeholder="Ваш комментарий..." rows="4"></textarea>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.thread-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.thread-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.thread-header h1 {
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+.thread-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.thread-stats {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.thread-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.thread-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.thread-author .avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.thread-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.thread-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.thread-comments {
+    margin-top: 3rem;
+}
+
+.comment {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comment-author .avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--text-secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    resize: vertical;
+}
+
+.empty-comments {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+</style>
+
+<script>
+function replyToThread() {
+    document.querySelector('.comment-form textarea').focus();
+}
+</script>
+{% endblock %}

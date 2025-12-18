@@ -10,4 +10,5 @@ urlpatterns = [
     path('forum/', views.forums_page, name='forums_page'),
     path('create_thread/', views.create_thread, name='create_thread'),
     path('news/<int:news_id>/', views.news_detail, name='news_detail'),
+    path('forum/<int:thread_id>/', views.thread_detail, name='thread_detail'),
 ]
