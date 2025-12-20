@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Thread
+from .models import Thread, Comment
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -28,4 +28,16 @@ class ThreadForm(forms.ModelForm):
             'title': 'Заголовок',
             'content': 'Содержание',
             'widgets': 'Категория',
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Написать комментарий...',
+                'class': 'form-control',
+            })
         }

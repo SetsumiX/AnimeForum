@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import UserRegisterForm, UserLoginForm, ThreadForm
-from .models import News, Thread
+from .forms import UserRegisterForm, UserLoginForm, ThreadForm, CommentForm
+from .models import News, Thread, Comment
 
 # Create your views here.
 def register(request):
@@ -85,13 +85,35 @@ def forums_page(request):
 
 def thread_detail(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
+
+    comments = thread.comments.all()
+
+    # Форма комментария
+    if request.method == 'POST' and request.user.is_authenticated:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.thread = thread
+            comment.author = request.user
+            comment.save()
+
+            thread.count_messages += 1
+            thread.last_message_time = comment.created_at
+            thread.save()
+
+            messages.success(request, 'Комментарий добавлен!')
+            return redirect('thread_detail', thread_id=thread.id)
+    else:
+        form = CommentForm()
+
     thread.count_views += 1
     thread.save()
 
     context = {
         'thread': thread,
+        'comments': comments,
+        'form': form,
     }
-
     return render(request, 'main/thread_detail.html', context)
 
 @login_required

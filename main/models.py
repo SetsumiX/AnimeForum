@@ -42,3 +42,18 @@ class Thread(models.Model):
     class Meta:
         verbose_name = "Тема форума"
         verbose_name_plural = "Темы форума"
+
+class Comment(models.Model):
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        verbose_name = "comment"
+        verbose_name_plural = "comments"
+
+    def __str__(self):
+        return f"Комментарий от {self.author} к '{self.thread.title}'"
