@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Thread, Comment
+from .models import Thread, Comment, Profile
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -40,4 +40,13 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Написать комментарий...',
                 'class': 'form-control',
             })
+        }
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio', 'birth_day']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Описание профиля...'}),
+            'birth_day': forms.DateInput(attrs={'type': 'date'}),
         }

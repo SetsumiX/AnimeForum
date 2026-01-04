@@ -37,10 +37,18 @@
                     <div class="header-actions">
                         {% if user.is_authenticated %}
                             <div class="user-profile">
-                                <div class="user-info">
-                                    <div class="avatar">{{ user.username|first|upper }}</div>
-                                    <span>{{ user.username }}</span>
-                                </div>
+                                <a href="{% url 'profile' user.username %}" style="text-decoration: none; color: inherit;">
+                                    <div class="user-info">
+                                        {% if profile.avatar %}
+                                            <img src="{{ profile.avatar.url }}" alt="{{ profile_user.username }}" class="avatar">
+                                        {% else %}
+                                            <div class="avatar no-avatar">
+                                                {{ profile_user.username|first|upper }}
+                                            </div>
+                                        {% endif %}
+                                        <span>{{ user.username }}</span>
+                                    </div>
+                                </a>
                                 <a href="{% url 'logout' %}" class="btn btn-outline" style="text-decoration: none">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>

@@ -11,4 +11,7 @@ urlpatterns = [
     path('create_thread/', views.create_thread, name='create_thread'),
     path('news/<int:news_id>/', views.news_detail, name='news_detail'),
     path('forum/<int:thread_id>/', views.thread_detail, name='thread_detail'),
+
+    path('profile/edit/', views.profile_edit , name='profile_edit'),
+    path('profile/<str:username>/', views.profile_view , name='profile'),
 ]

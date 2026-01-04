@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, Thread, Comment
+from .models import News, Thread, Comment, Profile
 
 # Register your models here.
 admin.site.register(News)
@@ -15,3 +15,8 @@ class CommentAdmin(admin.ModelAdmin):
         return obj.content[:50] + '...' if len(obj.content) > 50 else obj.content
 
     content_short.short_description = 'Комментарий'
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at']
+    search_fields = ['user__username', 'bio']

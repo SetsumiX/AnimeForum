@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import UserRegisterForm, UserLoginForm, ThreadForm, CommentForm
-from .models import News, Thread, Comment
+from .forms import UserRegisterForm, UserLoginForm, ThreadForm, CommentForm, ProfileForm
+from .models import News, Thread, Comment, Profile
 
 # Create your views here.
 def register(request):
@@ -135,3 +135,36 @@ def create_thread(request):
 
     return render(request, 'main/create_thread.html', context)
 
+
+def profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    context = {
+        'profile_user': user,
+        'profile': profile,
+        'user_threads': Thread.objects.filter(author=user),
+        'user_comments': Comment.objects.filter(author=user),
+    }
+    return render(request, 'main/profile.html', context)
+
+
+@login_required
+def profile_edit(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Профиль обновлён!')
+            return redirect('profile', username=request.user.username)
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'main/profile_edit.html', context)
