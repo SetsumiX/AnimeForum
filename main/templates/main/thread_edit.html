@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Редактирование темы</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Заголовок</label>
+            {{ form.title }}
+        </div>
+        
+        <div class="form-group">
+            <label>Категория</label>
+            {{ form.category }}
+        </div>
+        
+        <div class="form-group">
+            <label>Содержание</label>
+            {{ form.content }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'thread_detail' thread.id %}" class="btn btn-outline">Отмена</a>
+    </form>
+</div>
+
+<style>
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+</style>
+{% endblock %}

@@ -22,12 +22,22 @@ class ThreadForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'row': 3}),
-            'widgets': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'title': 'Заголовок',
             'content': 'Содержание',
-            'widgets': 'Категория',
+            'category': 'Категория',
+        }
+
+class ThreadEditForm(forms.ModelForm):
+    class Meta:
+        model = Thread
+        fields = ['title', 'content', 'category']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class CommentForm(forms.ModelForm):

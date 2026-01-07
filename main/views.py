@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import UserRegisterForm, UserLoginForm, ThreadForm, CommentForm, ProfileForm
+from .forms import UserRegisterForm, UserLoginForm, ThreadForm, CommentForm, ProfileForm, ThreadEditForm
 from .models import News, Thread, Comment, Profile
 
 # Create your views here.
@@ -134,6 +134,47 @@ def create_thread(request):
     }
 
     return render(request, 'main/create_thread.html', context)
+
+
+@login_required
+def thread_edit(request, thread_id):
+    thread = get_object_or_404(Thread, id=thread_id)
+
+    if not (request.user == thread.author or request.user.is_staff):
+        messages.error(request, 'У вас нет прав для редактирования этой темы')
+        return redirect('thread_detail', thread_id=thread_id)
+
+    if request.method == 'POST':
+        form = ThreadEditForm(request.POST, instance=thread)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Тема успешно обновлена!')
+            return redirect('thread_detail', thread_id=thread_id)
+    else:
+        form = ThreadEditForm(instance=thread)
+
+    return render(request, 'main/thread_edit.html', {
+        'form': form,
+        'thread': thread,
+    })
+
+
+@login_required
+def thread_delete(request, thread_id):
+    thread = get_object_or_404(Thread, id=thread_id)
+
+    if not (request.user == thread.author or request.user.is_staff):
+        messages.error(request, 'У вас нет прав для удаления этой темы')
+        return redirect('thread_detail', thread_id=thread_id)
+
+    if request.method == 'POST':
+        thread.delete()
+        messages.success(request, 'Тема успешно удалена!')
+        return redirect('forums_page')
+
+    return render(request, 'main/thread_delete_confirm.html', {
+        'thread': thread,
+    })
 
 
 def profile_view(request, username):

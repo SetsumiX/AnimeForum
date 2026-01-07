@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="delete-confirm">
+        <h1>Удаление темы</h1>
+        
+        <div class="alert alert-danger">
+            <p>Вы уверены, что хотите удалить тему <strong>"{{ thread.title }}"</strong>?</p>
+            <p>Это действие нельзя отменить.</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="background: #ff5555; color: white">Да, удалить</button>
+            <a href="{% url 'thread_detail' thread.id %}" class="btn btn-outline">Отмена</a>
+        </form>
+    </div>
+</div>
+
+<style>
+.delete-confirm {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+}
+
+.alert {
+    padding: 1.5rem;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    margin: 2rem 0;
+    color: #721c24;
+}
+</style>
+{% endblock %}

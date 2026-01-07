@@ -42,7 +42,7 @@
                                         {% if profile.avatar %}
                                             <img src="{{ profile.avatar.url }}" alt="{{ profile_user.username }}" class="avatar">
                                         {% else %}
-                                            <div class="avatar no-avatar">
+                                            <div class="no-avatar">
                                                 {{ profile_user.username|first|upper }}
                                             </div>
                                         {% endif %}
