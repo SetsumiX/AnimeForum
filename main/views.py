@@ -209,3 +209,32 @@ def profile_edit(request):
     }
 
     return render(request, 'main/profile_edit.html', context)
+
+
+def search(request):
+    query = request.GET.get('q', '').strip()
+    results = {
+        'news': [],
+        'threads': [],
+        'users': []
+    }
+
+    if query:
+        results['news'] = News.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )[:10]
+
+        results['threads'] = Thread.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )[:10]
+
+        results['users'] = User.objects.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )[:10]
+
+    context = {
+        'query': query,
+        'results': results,
+        'total_results': sum(len(v) for v in results.values()),
+    }
+    return render(request, 'main/search.html', context)

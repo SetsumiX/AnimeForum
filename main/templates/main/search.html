@@ -1,0 +1,201 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <div class="search-header">
+        <form method="get" action="{% url 'search' %}" class="search-form">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" name="q" value="{{ query }}" placeholder="Поиск по сайту..." autofocus>
+                <button type="submit" class="btn btn-primary">Найти</button>
+            </div>
+        </form>
+        
+        {% if query %}
+            <p class="search-meta">Найдено результатов: {{ total_results }}</p>
+        {% endif %}
+    </div>
+    
+    {% if query %}
+        {% if total_results == 0 %}
+            <div class="no-results">
+                <h3>Ничего не найдено по запросу "{{ query }}"</h3>
+                <p>Попробуйте другие ключевые слова</p>
+            </div>
+        {% else %}
+            {% if results.news %}
+                <div class="search-section">
+                    <h3>Новости ({{ results.news|length }})</h3>
+                    <div class="news-grid">
+                        {% for news in results.news %}
+                            <a href="{% url 'news_detail' news.id %}" class="news-card">
+                                <img src="{{ news.image }}" alt="{{ news.title }}">
+                                <div class="news-card-header">
+                                    <span class="badge">{{ news.category }}</span>
+                                    <h4>{{ news.title }}</h4>
+                                    <p>{{ news.content|truncatechars:100 }}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if results.threads %}
+                <div class="search-section">
+                    <h3>Темы форума ({{ results.threads|length }})</h3>
+                    <div class="forum-list">
+                        {% for thread in results.threads %}
+                            <a href="{% url 'thread_detail' thread.id %}" class="forum-card">
+                                <div class="forum-card-content">
+                                    <div class="forum-avatar">{{ thread.author.username|first|upper }}</div>
+                                    <div class="forum-info">
+                                        <div class="forum-badge">{{ thread.category }}</div>
+                                        <h4>{{ thread.title }}</h4>
+                                        <p>{{ thread.content|truncatechars:100 }}</p>
+                                        <div class="forum-meta">
+                                            <span>{{ thread.author.username }}</span>
+                                            <span>{{ thread.created_at|date:"d.m.Y" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if results.users %}
+                <div class="search-section">
+                    <h3>Пользователи ({{ results.users|length }})</h3>
+                    <div class="users-grid">
+                        {% for user in results.users %}
+                            <a href="{% url 'profile' user.username %}" class="user-card">
+                                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                                <div class="user-info">
+                                    <h4>{{ user.username }}</h4>
+                                    <p>{{ user.email }}</p>
+                                    <small>Зарегистрирован: {{ user.date_joined|date:"d.m.Y" }}</small>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <div class="search-empty">
+            <h3>Введите поисковый запрос</h3>
+            <p>Начните вводить в поле выше для поиска новостей, тем форума или пользователей</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.search-header {
+    margin-bottom: 2rem;
+}
+
+.search-form {
+    margin-bottom: 1rem;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.search-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.search-section h3 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.no-results, .search-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.2s;
+}
+
+.user-card:hover {
+    transform: translateY(-3px);
+    background: var(--card-bg);
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.user-info h4 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.user-info p, .user-info small {
+    margin: 0.25rem 0;
+    color: var(--text-secondary);
+}
+</style>
+{% endblock %}

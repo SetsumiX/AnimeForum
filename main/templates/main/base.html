@@ -7,13 +7,14 @@
     {% load static %}
     <link rel="icon" type='image/x-icon' href="{% static 'main/img/icon.ico' %}">
     <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
-<!--    <script src="{% static 'main/js/script.js' %}" defer></script>-->
+
 </head>
 <body>
     <!-- Шапка сайта -->
     <header class="header">
         <div class="container">
-            <div class="header-content">
+            <div class="header-content" style="display: flex; align-items: center; justify-content: space-between; gap: 2rem;">
+                <!-- Логотип -->
                 <div class="logo">
                     <a href="{% url 'home' %}" style="text-decoration: none;">
                         <svg class="logo-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -23,82 +24,65 @@
                         <h1>FAChan</h1>
                     </a>
                 </div>
-                
-                <div class="header-actions">
-                    <!-- Кнопка поиска -->
-                    <button class="btn-icon" id="searchBtn" title="Поиск">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
 
-                    <!-- Кнопки авторизации -->
-                    <div class="header-actions">
-                        {% if user.is_authenticated %}
-                            <div class="user-profile">
-                                <a href="{% url 'profile' user.username %}" style="text-decoration: none; color: inherit;">
-                                    <div class="user-info">
-                                        {% if profile.avatar %}
-                                            <img src="{{ profile.avatar.url }}" alt="{{ profile_user.username }}" class="avatar">
-                                        {% else %}
-                                            <div class="no-avatar">
-                                                {{ profile_user.username|first|upper }}
-                                            </div>
-                                        {% endif %}
-                                        <span>{{ user.username }}</span>
+                <!-- Поиск -->
+                <div class="search-container">
+                    <form method="get" action="{% url 'search' %}" class="search-form-header">
+                        <input type="text" name="q" placeholder="Поиск по новостям, форумам, пользователям..." class="search-input">
+                        <button type="submit" class="search-btn" title="Поиск">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Кнопки авторизации -->
+                {% if user.is_authenticated %}
+                    <div class="user-profile">
+                        <a href="{% url 'profile' user.username %}" style="text-decoration: none; color: inherit;">
+                            <div class="user-info">
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar">
+                                {% else %}
+                                    <div class="no-avatar">
+                                        {{ user.username|first|upper }}
                                     </div>
-                                </a>
-                                <a href="{% url 'logout' %}" class="btn btn-outline" style="text-decoration: none">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                        <polyline points="16 17 21 12 16 7"></polyline>
-                                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                                    </svg>
-                                    Выйти
-                                </a>
+                                {% endif %}
+                                <span>{{ user.username }}</span>
                             </div>
-                        {% else %}
-                            <div>
-                                <a href="{% url 'login' %}" class="btn btn-outline" style="text-decoration: none">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                                        <polyline points="10 17 15 12 10 7"></polyline>
-                                        <line x1="15" y1="12" x2="3" y2="12"></line>
-                                    </svg>
-                                    Войти
-                                </a>
-                            </div>
-                            <div>
-                                <a href="{% url 'register' %}" class="btn btn-primary" style="text-decoration: none">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <line x1="19" y1="8" x2="19" y2="14"></line>
-                                        <line x1="22" y1="11" x2="16" y2="11"></line>
-                                    </svg>
-                                    Регистрация
-                                </a>
-                            </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Профиль пользователя (показывается если авторизован) -->
-                    <div id="userProfile" class="user-profile" style="display: none;">
-                        <div class="user-info">
-                            <div class="avatar" id="userAvatar">A</div>
-                            <span id="username">Пользователь</span>
-                        </div>
-                        <button class="btn btn-outline" id="logoutBtn">
+                        </a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline" style="text-decoration: none">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
                             </svg>
                             Выйти
-                        </button>
+                        </a>
                     </div>
-                </div>
+                {% else %}
+                    <div class="auth-buttons">
+                        <a href="{% url 'login' %}" class="btn btn-outline" style="text-decoration: none">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                            Войти
+                        </a>
+                        <a href="{% url 'register' %}" class="btn btn-primary" style="text-decoration: none">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <line x1="19" y1="8" x2="19" y2="14"></line>
+                                <line x1="22" y1="11" x2="16" y2="11"></line>
+                            </svg>
+                            Регистрация
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </header>
@@ -127,7 +111,7 @@
                         Форум
                     </a>
                 </div>
-                
+
                 <!-- Контент вкладки "Новости" -->
                 <div class="tab-content active" id="news">
                     <div class="section-header">
@@ -139,14 +123,14 @@
 
                     </div>
                 </div>
-                
+
                 <!-- Контент вкладки "Форум" -->
                 <div class="tab-content" id="forum">
 
                     <div class="section-header">
                         <h2>Темы форума</h2>
                     </div>
-                    
+
                     <div class="forum-list" id="forumList">
                         {% for thread in threads %}
 
@@ -165,7 +149,7 @@
                 <h3>Поиск</h3>
                 <button class="modal-close" data-modal="searchModal">&times;</button>
             </div>
-            
+
             <div class="search-box">
                 <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -173,7 +157,7 @@
                 </svg>
                 <input type="text" id="searchInput" placeholder="Поиск новостей, тем форума или пользователей..." autofocus>
             </div>
-            
+
             <div class="search-results" id="searchResults">
                 <div class="search-empty">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

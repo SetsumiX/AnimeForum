@@ -36,49 +36,87 @@
     }
   },
   {
-    "model": "main.thread",
-    "pk": 1,
+    "model": "main.news",
+    "pk": 4,
     "fields": {
-      "title": "Какое аниме посмотреть новичку?",
-      "content": "Только начинаю смотреть аниме, посоветуйте что-то легкое для старта. Какие сериалы самые понятные для начала?",
-      "author": 1,
-      "created_at": "2024-01-10T14:20:00Z",
-      "category": "Рекомендации",
-      "count_messages": 24,
-      "count_views": 312,
-      "last_message_time": "2024-01-10T14:20:00Z"
+      "title": "Фильм по мотивам манги бьет рекорды кассовых сборов",
+      "content": "Экранизация популярной манги собрала рекордную сумму в первые выходные проката по всему миру.",
+      "created_at": "2024-01-07T14:20:00Z",
+      "count_views": 1876,
+      "category": "Кино",
+      "image": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600"
     }
   },
   {
-    "model": "main.thread",
-    "pk": 2,
+    "model": "main.news",
+    "pk": 5,
     "fields": {
-      "title": "Обсуждение манги One Piece",
-      "content": "Что думаете о последних главах? Какие будут предсказания на развитие сюжета? Давайте обсудим!",
-      "author": 1,
-      "created_at": "2024-01-09T11:45:00Z",
-      "category": "Обсуждение",
-      "count_messages": 156,
-      "count_views": 2104,
-      "last_message_time": "2024-01-10T09:30:00Z"
+      "title": "Выход коллекционного издания классического аниме",
+      "content": "Издательство анонсировало лимитированное коллекционное издание культового аниме с бонусными материалами.",
+      "created_at": "2024-01-06T11:45:00Z",
+      "count_views": 943,
+      "category": "Аниме",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600"
     }
   },
   {
-    "model": "auth.user",
-    "pk": 1,
+    "model": "main.news",
+    "pk": 6,
     "fields": {
-      "password": "pbkdf2_sha256$600000$abc123abc123abc123abc123abc123ab$abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123abcd=",
-      "last_login": null,
-      "is_superuser": true,
-      "username": "kanava",
-      "first_name": "",
-      "last_name": "",
-      "email": "kanava@fachan.com",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2024-01-01T00:00:00Z",
-      "groups": [],
-      "user_permissions": []
+      "title": "Косплей-фестиваль в Санкт-Петербурге",
+      "content": "Выходные в Санкт-Петербурге пройдут под знаком косплея: ожидается более 500 участников и тысячи зрителей.",
+      "created_at": "2024-01-05T09:10:00Z",
+      "count_views": 1321,
+      "category": "События",
+      "image": "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 7,
+    "fields": {
+      "title": "Новая мобильная RPG по вселенной аниме",
+      "content": "Разработчики представили новую мобильную RPG с геймплеем в стиле популярного аниме-сериала.",
+      "created_at": "2024-01-04T16:50:00Z",
+      "count_views": 765,
+      "category": "Игры",
+      "image": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 8,
+    "fields": {
+      "title": "Интервью с создателем популярного аниме",
+      "content": "Эксклюзивное интервью с режиссером одного из самых обсуждаемых аниме этого года.",
+      "created_at": "2024-01-03T13:25:00Z",
+      "count_views": 1120,
+      "category": "Интервью",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 9,
+    "fields": {
+      "title": "Виртуальная аниме-выставка в метавселенной",
+      "content": "Новая технология позволяет посетить аниме-выставку из любой точки мира через VR-устройства.",
+      "created_at": "2024-01-02T18:15:00Z",
+      "count_views": 987,
+      "category": "Технологии",
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600"
+    }
+  },
+  {
+    "model": "main.news",
+    "pk": 10,
+    "fields": {
+      "title": "Саундтрек к новому аниме возглавил чарты",
+      "content": "Музыкальное сопровождение к последнему аниме-хиту стало самым прослушиваемым альбомом на стриминговых платформах.",
+      "created_at": "2024-01-01T20:05:00Z",
+      "count_views": 1543,
+      "category": "Музыка",
+      "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600"
     }
   }
 ]
