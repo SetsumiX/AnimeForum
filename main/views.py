@@ -52,6 +52,8 @@ def home(request):
         'threads': threads,
         'items_count': news.count(),
         'active_tab': 'news',
+        'user_count': User.objects.count(),
+        'threads_count': Thread.objects.count(),
     }
     return render(request, 'main/news.html', context)
 
