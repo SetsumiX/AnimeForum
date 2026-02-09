@@ -1,10 +1,10 @@
 # 🎌 FAChan - Аниме Форум
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Django-5.2-092E20?logo=django" alt="Django 6.0.1">
-  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?logo=python" alt="Python 2025.3.1">
+  <img src="https://img.shields.io/badge/Django-6.0.1-092E20?logo=django" alt="Django 6.0.1">
+  <img src="https://img.shields.io/badge/Python-2025.3.1-3776AB?logo=python" alt="Python 2025.3.1">
   <img src="https://img.shields.io/badge/SQLite-07405E?logo=sqlite" alt="SQLite">
-  <img src="https://img.shields.io/badge/Pillow-10.4.0-FF6B6B" alt="Pillow">
+  <img src="https://img.shields.io/badge/Pillow-12.1.0.-FF6B6B" alt="Pillow">
   <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5" alt="HTML5">
   <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3" alt="CSS3">
 </p>
